@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>German Masters Roadmap — Anish Achutha</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+  :root {
+    --black:#0e0e0e;--off-white:#f5f3ef;--cream:#ede9e1;--ink:#1a1a1a;--muted:#6b6860;
+    --border:#d6d2c8;--accent:#2d5be3;--accent-bg:#eef1fc;
+    --danger:#c0392b;--danger-bg:#fdf0ee;
+    --warn:#9a6200;--warn-bg:#fef5e4;
+    --success:#1d7a4a;--success-bg:#edf7f2;
+    --neutral-bg:#f0eeea;
+    --font-display:'Space Grotesk',sans-serif;--font-body:'Inter',sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--off-white);color:var(--ink);font-family:var(--font-body);font-size:14px;line-height:1.6;min-height:100vh}
+  .hero{background:var(--black);color:var(--off-white);padding:3.5rem 2rem 3rem;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:-80px;right:-80px;width:320px;height:320px;border-radius:50%;border:60px solid rgba(45,91,227,0.15);pointer-events:none}
+  .hero-inner{max-width:820px;margin:0 auto;position:relative}
+  .hero-eyebrow{font-family:var(--font-body);font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);background:rgba(45,91,227,0.15);display:inline-block;padding:3px 10px;border-radius:20px;margin-bottom:1.25rem}
+  .hero h1{font-family:var(--font-display);font-size:clamp(2rem,5vw,3.2rem);font-weight:700;line-height:1.1;margin-bottom:0.75rem;letter-spacing:-0.02em}
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .hero-sub{font-size:15px;color:rgba(245,243,239,0.6);max-width:480px;margin-bottom:2rem}
+  .hero-stats{display:flex;gap:2rem;flex-wrap:wrap}
+  .hero-stat .val{font-family:var(--font-display);font-size:2rem;font-weight:700;color:var(--off-white);line-height:1}
+  .hero-stat .lbl{font-size:11px;color:rgba(245,243,239,0.5);margin-top:2px;text-transform:uppercase;letter-spacing:0.08em}
+  .hero-divider{width:1px;background:rgba(255,255,255,0.1);align-self:stretch}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  .alert{background:#fff8e6;border:1px solid #f0c040;border-radius:10px;padding:0.9rem 1.1rem;margin-bottom:1.5rem;font-size:13px;color:#7a5500;display:flex;gap:10px;align-items:flex-start}
+  .alert-icon{font-size:18px;flex-shrink:0;margin-top:-1px}
+  .alert strong{color:#5a3c00}
+  .legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.75rem;padding:0.75rem 1rem;background:var(--cream);border-radius:8px;border:1px solid var(--border)}
+  .legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+  .legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .progress-overview{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:2rem}
+  .stat-card{background:white;border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem}
+  .stat-card .val{font-family:var(--font-display);font-size:1.8rem;font-weight:700;color:var(--ink);line-height:1}
+  .stat-card .lbl{font-size:11px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:0.07em}
+  .phase{margin-bottom:1rem;border:1px solid var(--border);border-radius:12px;background:white;overflow:hidden}
+  .phase-header{display:flex;align-items:center;gap:12px;padding:1rem 1.25rem;cursor:pointer;user-select:none;background:white;transition:background 0.15s}
+  .phase-header:hover{background:var(--neutral-bg)}
+  .phase-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+  .phase-title{font-family:var(--font-display);font-size:15px;font-weight:600;color:var(--ink);flex:1}
+  .phase-period{font-size:12px;color:var(--muted);white-space:nowrap}
+  .phase-count{font-size:11px;color:var(--muted);white-space:nowrap}
+  .chevron{font-size:16px;color:var(--muted);transition:transform 0.2s;margin-left:4px}
+  .phase.open .chevron{transform:rotate(180deg)}
+  .phase-progress{height:3px;background:var(--border)}
+  .phase-progress-fill{height:100%;background:var(--accent);transition:width 0.3s ease;width:0%}
+  .phase-body{display:none;padding:0 1.25rem 1.25rem}
+  .phase.open .phase-body{display:block}
+  .section-label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin:1.25rem 0 0.5rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border)}
+  .checklist{list-style:none}
+  .checklist li{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid rgba(214,210,200,0.5);line-height:1.5}
+  .checklist li:last-child{border-bottom:none}
+  .checklist li input[type="checkbox"]{margin-top:2px;flex-shrink:0;width:15px;height:15px;cursor:pointer;accent-color:var(--accent)}
+  .checklist li .task-text{flex:1;font-size:13px;color:var(--ink)}
+  .checklist li.done .task-text{color:var(--muted);text-decoration:line-through}
+  .tag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;flex-shrink:0;margin-left:auto;white-space:nowrap;text-transform:uppercase;letter-spacing:0.05em}
+  .tag.must{background:var(--danger-bg);color:var(--danger)}
+  .tag.high{background:var(--warn-bg);color:var(--warn)}
+  .tag.boost{background:var(--success-bg);color:var(--success)}
+  .tag.info{background:var(--accent-bg);color:var(--accent)}
+  .tag.urgent{background:#1a0a00;color:#ffb347}
+  .uni-table{width:100%;border-collapse:collapse;margin:1.25rem 0 0.5rem;font-size:13px}
+  .uni-table th{text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);padding:6px 10px;border-bottom:1px solid var(--border);background:var(--neutral-bg)}
+  .uni-table td{padding:8px 10px;border-bottom:1px solid rgba(214,210,200,0.5);vertical-align:top}
+  .uni-table tr:last-child td{border-bottom:none}
+  .tier-badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.05em}
+  .tier-reach{background:#fce8e8;color:#a31515}
+  .tier-target{background:var(--warn-bg);color:var(--warn)}
+  .tier-safe{background:var(--success-bg);color:var(--success)}
+  .tier-safety{background:var(--accent-bg);color:var(--accent)}
+  .footer{text-align:center;padding:2rem;font-size:12px;color:var(--muted);border-top:1px solid var(--border);margin-top:1rem}
+  @media(max-width:600px){.hero{padding:2.5rem 1.25rem 2rem}.hero-stats{gap:1.25rem}.phase-period{display:none}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">German Masters 2028</div>
+    <h1>Your <em>guaranteed</em><br>seat roadmap</h1>
+    <p class="hero-sub">Every task, document, and deadline — from dMAT to Ankunft. Check things off as you go. Progress saves automatically.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="val" id="stat-total">—</div><div class="lbl">Total tasks</div></div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat"><div class="val" id="stat-done">0</div><div class="lbl">Completed</div></div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat"><div class="val" id="stat-must">—</div><div class="lbl">Must-dos left</div></div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat"><div class="val">8–10</div><div class="lbl">Universities</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- URGENT ALERT -->
+  <div class="alert">
+    <span class="alert-icon">⚡</span>
+    <div>
+      <strong>Action required before Sep 15, 2026:</strong> Register for the dMAT exam (new APS requirement for Engineering/CS applicants). Test date is Sep 26, 2026 in Bangalore. Fee is €150. Register at aps-india.de/dmat/ — do not wait.
+    </div>
+  </div>
+
+  <div class="legend">
+    <span class="legend-item"><span class="legend-dot" style="background:#c0392b"></span> Must-do</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#ffb347"></span> Urgent / time-sensitive</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#e67e22"></span> High impact</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#1d7a4a"></span> Profile booster</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#2d5be3"></span> Info</span>
+  </div>
+
+  <div class="progress-overview">
+    <div class="stat-card"><div class="val" id="c-total">—</div><div class="lbl">Total tasks</div></div>
+    <div class="stat-card"><div class="val" id="c-done">0</div><div class="lbl">Done</div></div>
+    <div class="stat-card"><div class="val" id="c-must">—</div><div class="lbl">Must-dos left</div></div>
+    <div class="stat-card"><div class="val" id="c-pct">0%</div><div class="lbl">Overall progress</div></div>
+  </div>
+
+  <!-- UNI TABLE -->
+  <div class="phase" style="margin-bottom:1.5rem;">
+    <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <span class="phase-dot" style="background:#2d5be3"></span>
+      <span class="phase-title">University portfolio — apply to all tiers</span>
+      <span class="phase-period">Submit Oct–Dec 2027</span>
+      <span class="chevron">&#8964;</span>
+    </div>
+    <div class="phase-body">
+      <table class="uni-table">
+        <thead><tr><th>Tier</th><th>University</th><th>Program</th><th>Portal</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tier-badge tier-reach">Reach</span></td><td>RWTH Aachen</td><td>M.Sc. Computer Science</td><td>Uni-Assist</td></tr>
+          <tr><td><span class="tier-badge tier-reach">Reach</span></td><td>TU Munich</td><td>M.Sc. Informatics</td><td>Direct portal</td></tr>
+          <tr><td><span class="tier-badge tier-target">Target</span></td><td>KIT Karlsruhe</td><td>M.Sc. Computer Science</td><td>Uni-Assist</td></tr>
+          <tr><td><span class="tier-badge tier-target">Target</span></td><td>TU Berlin</td><td>M.Sc. Computer Science</td><td>Uni-Assist</td></tr>
+          <tr><td><span class="tier-badge tier-target">Target</span></td><td>TU Darmstadt</td><td>M.Sc. Computer Science</td><td>Uni-Assist</td></tr>
+          <tr><td><span class="tier-badge tier-safe">Safe-strong</span></td><td>Uni Stuttgart</td><td>M.Sc. Computer Science</td><td>Uni-Assist</td></tr>
+          <tr><td><span class="tier-badge tier-safe">Safe-strong</span></td><td>Uni Freiburg</td><td>M.Sc. Computer Science</td><td>Direct portal</td></tr>
+          <tr><td><span class="tier-badge tier-safe">Safe-strong</span></td><td>Uni Hamburg</td><td>M.Sc. Computer Science</td><td>Uni-Assist</td></tr>
+          <tr><td><span class="tier-badge tier-safety">Safety</span></td><td>Uni Duisburg-Essen</td><td>M.Sc. Computer Science</td><td>Uni-Assist</td></tr>
+          <tr><td><span class="tier-badge tier-safety">Safety</span></td><td>Uni Paderborn</td><td>M.Sc. Computer Science</td><td>Direct portal</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12px;color:var(--muted);margin-top:0.5rem;">Uni-Assist: €75 first + €30 each after. Most direct portals are free. Budget ~€200–300 total.</p>
+    </div>
+  </div>
+
+  <div id="phases-container"></div>
+</div>
+
+<div class="footer">
+  Built for Anish Achutha &nbsp;·&nbsp; JSSATE Bangalore → Germany 2028 &nbsp;·&nbsp; Progress saves automatically in your browser
+</div>
+
+<script>
+const PHASES = [
+  {
+    id:"p1", label:"Phase 1 — Foundation", period:"Now → Dec 2026", color:"#c0392b",
+    sections:[
+      { label:"⚡ dMAT exam — register before Sep 15, 2026", items:[
+        {t:"Register for dMAT at aps-india.de/dmat/ before September 15, 2026", tag:"must"},
+        {t:"Pay dMAT fee of €150 during registration", tag:"must"},
+        {t:"Confirm Bangalore as your test center", tag:"must"},
+        {t:"Write dMAT exam on September 26, 2026", tag:"must"},
+        {t:"dMAT certificate available October 12 — download and save immediately", tag:"must"},
+        {t:"Note: dMAT score appears on your APS certificate — prepare seriously, not just to pass", tag:"info"},
+      ]},
+      { label:"APS Certificate — complete after dMAT", items:[
+        {t:"Gather all marksheets (Sem 1–4, attested), enrollment letter, degree certificate copy", tag:"must"},
+        {t:"Apply for APS certificate at German consulate Chennai or Mumbai after dMAT is done", tag:"must"},
+        {t:"Pay APS fee (~₹18,000–22,000) — one-time, valid for all universities", tag:"must"},
+        {t:"APS takes 4–8 weeks to process — submit well before Dec 2026", tag:"must"},
+        {t:"Track application and follow up if no update after 6 weeks", tag:"high"},
+      ]},
+      { label:"Research paper 1 — submit by Oct/Nov 2026", items:[
+        {t:"Re-engage Prof. Nandi — schedule a meeting, pitch a specific FL paper topic", tag:"must"},
+        {t:"Finalize paper topic — FL + your existing IIT G work is the natural starting point", tag:"must"},
+        {t:"Draft paper structure and get Prof. Nandi's sign-off before writing", tag:"must"},
+        {t:"Write full draft and iterate with Prof. Nandi on revisions", tag:"must"},
+        {t:"Submit to Scopus-indexed conference or journal before Nov 2026", tag:"must"},
+        {t:"'Under review' status still counts — mention it in SOP and CV immediately", tag:"high"},
+      ]},
+      { label:"IELTS — target exam by mid-2027", items:[
+        {t:"Start IELTS prep now — aim for at least 6 months of consistent prep", tag:"must"},
+        {t:"Target: 7.5+ overall, no individual band below 6.5", tag:"must"},
+        {t:"Focus on Writing Task 2 and Speaking — highest variance for Indian test-takers", tag:"high"},
+        {t:"Take one full mock test per week, review every mistake category", tag:"high"},
+        {t:"Book exam slot 2–3 months in advance — slots fill quickly in Bangalore", tag:"must"},
+      ]},
+      { label:"German language — target B1", items:[
+        {t:"Enroll in A1 German course — Goethe Institut online or local centre in Bangalore", tag:"boost"},
+        {t:"Clear A1 by end of 2026", tag:"boost"},
+        {t:"Target A2 by mid-2027, B1 certificate by application time (Oct 2027)", tag:"boost"},
+        {t:"B1 is your target — noticed by committees, opens more program options", tag:"boost"},
+        {t:"Goethe Institut B1 certificate is the most recognized — use their official exam", tag:"info"},
+      ]},
+      { label:"Portfolio and projects", items:[
+        {t:"Get ORBIT to a deployable state — real usage beats an impressive README", tag:"high"},
+        {t:"Push all projects to GitHub with clean READMEs and demo links", tag:"high"},
+        {t:"Document IIT Guwahati internship concretely: dataset size, method, accuracy outcome", tag:"must"},
+        {t:"Complete GCP Cloud Arcade facilitator program (ends Sep 14, 2026)", tag:"boost"},
+        {t:"One Kaggle competition or open-source FL contribution — quality over quantity", tag:"boost"},
+      ]},
+    ]
+  },
+  {
+    id:"p2", label:"Phase 2 — Research, paper 2 and internships", period:"Jan–Jun 2027", color:"#0d7c5c",
+    sections:[
+      { label:"Research paper 2 — target submission mid-2027", items:[
+        {t:"Identify paper 2 topic — should build on paper 1 to show a coherent research narrative", tag:"must"},
+        {t:"Paper 2 can be a workshop paper or conference short paper if timeline is tight", tag:"info"},
+        {t:"Co-author with Prof. Nandi or second internship supervisor for stronger credibility", tag:"high"},
+        {t:"Submit by June 2027 — under review by application time is fine", tag:"must"},
+        {t:"Both papers should appear on CV and SOP with publication status clearly stated", tag:"must"},
+      ]},
+      { label:"Second research internship", items:[
+        {t:"Apply for DAAD WISE scholarship — research internship at a German university, highest ROI item on this list", tag:"must"},
+        {t:"DAAD WISE application typically opens Oct–Nov, deadline around Dec–Jan — research early", tag:"high"},
+        {t:"If DAAD WISE doesn't work out: target IISc Bangalore (easy logistics) or IIT Bombay/Delhi", tag:"high"},
+        {t:"A German professor LOR from DAAD WISE is extraordinarily powerful for your application", tag:"info"},
+        {t:"Document second internship outcomes with the same concreteness as IIT Guwahati", tag:"must"},
+      ]},
+      { label:"University deep research", items:[
+        {t:"For each shortlisted university: identify 2–3 professors whose research aligns with FL/AI", tag:"must"},
+        {t:"Read 1–2 recent papers (2024–2025) from each target professor", tag:"must"},
+        {t:"Check if they use Uni-Assist portal or direct application — affects fees and timeline", tag:"must"},
+        {t:"Confirm program language: most CS programs at target universities are English-taught", tag:"info"},
+        {t:"Note each university's exact deadline — typically Jan 15 (winter) or May 31 (summer)", tag:"must"},
+      ]},
+      { label:"Cold emails to professors — optional but high ROI", items:[
+        {t:"Email 5–7 target professors — 5 lines max, mention their specific paper, your IIT G work and papers", tag:"boost"},
+        {t:"Attach your CV and link to your paper (published or under review)", tag:"boost"},
+        {t:"Personalize every email — mass-emailing the same template is obvious and counterproductive", tag:"info"},
+        {t:"A positive reply is not an admission guarantee but significantly strengthens your SOP", tag:"info"},
+      ]},
+      { label:"Scholarship applications", items:[
+        {t:"DAAD Scholarship — apply separately from university application, IIT LOR + papers helps a lot", tag:"high"},
+        {t:"Deutschlandstipendium — apply directly at the university after receiving admission", tag:"high"},
+        {t:"Konrad Adenauer Foundation — merit-based, worth applying", tag:"boost"},
+        {t:"Heinrich Böll Foundation — open to international students", tag:"boost"},
+        {t:"Reminder: German public universities have zero tuition — semester fee only (~€150–350)", tag:"info"},
+      ]},
+    ]
+  },
+  {
+    id:"p3", label:"Phase 3 — Document preparation", period:"Jul–Sep 2027", color:"#9a4e00",
+    sections:[
+      { label:"Statement of Purpose — most critical document", items:[
+        {t:"Write a distinct SOP for every university — real customization, not a template swap", tag:"must"},
+        {t:"Structure: Why this field → What you've done (IIT G, 2 papers, internships) → Why THIS university → What after", tag:"must"},
+        {t:"Name the specific professor and research group you want to work with", tag:"must"},
+        {t:"600–900 words, 1–1.5 pages, no filler, no generic opening lines", tag:"must"},
+        {t:"Do not open with 'Since childhood I have been fascinated by computers'", tag:"info"},
+        {t:"Get SOP reviewed by Prof. Nandi or a German university alumni before finalizing", tag:"high"},
+        {t:"Write first draft in July, iterate through August, finalize by September", tag:"high"},
+      ]},
+      { label:"Letters of Recommendation", items:[
+        {t:"LOR 1: Prof. Nandi (IIT Guwahati) — your strongest card, request 2+ months in advance", tag:"must"},
+        {t:"LOR 2: Second internship supervisor — ideally German professor if DAAD WISE worked out", tag:"must"},
+        {t:"LOR 3: JSSATE faculty who knows your actual work, not a random professor", tag:"must"},
+        {t:"Give each referee: updated CV, SOP draft, and a note on what specifically to highlight", tag:"must"},
+        {t:"Follow up professionally 2 weeks before each deadline — do not assume they remember", tag:"high"},
+      ]},
+      { label:"CV — German academic format", items:[
+        {t:"Include professional photo — standard in Germany, unlike US/UK", tag:"must"},
+        {t:"Include date of birth and nationality (German CV standard)", tag:"must"},
+        {t:"Order: Education → Research Experience → Publications → Projects → Skills → Extracurriculars", tag:"must"},
+        {t:"Publications section: list both papers with journal/conference name and status", tag:"must"},
+        {t:"Research section: IIT Guwahati + second internship — name project, tools, concrete outcomes", tag:"must"},
+        {t:"Projects: ORBIT, Forgex, SWARM — 2–3 outcome-focused lines each", tag:"high"},
+        {t:"Include: GDG co-organizer, hackathon wins, GCP certs, DBMS certification", tag:"boost"},
+        {t:"Max 2 pages, clean academic formatting — not a colourful Canva resume", tag:"must"},
+      ]},
+      { label:"Supporting documents", items:[
+        {t:"All semester marksheets — attested and notarized copies of all semesters completed", tag:"must"},
+        {t:"Enrollment certificate or provisional degree letter from JSSATE", tag:"must"},
+        {t:"Official IELTS score report (sent directly from British Council to universities)", tag:"must"},
+        {t:"APS certificate + dMAT certificate — must both be in hand before submitting applications", tag:"must"},
+        {t:"Passport copy — valid for at least 2 years beyond intended study start date", tag:"must"},
+        {t:"German B1 Goethe certificate if completed", tag:"boost"},
+        {t:"Motivation letter — some universities require this separately from SOP", tag:"high"},
+        {t:"Internship/work experience certificates from both internships", tag:"high"},
+      ]},
+    ]
+  },
+  {
+    id:"p4", label:"Phase 4 — Submit applications", period:"Oct–Dec 2027", color:"#6d28d9",
+    sections:[
+      { label:"Application logistics", items:[
+        {t:"Create Uni-Assist account early — portal gets congested near deadlines", tag:"must"},
+        {t:"Uni-Assist fee: €75 for first university, €30 for each additional", tag:"info"},
+        {t:"Budget €200–300 total for all application fees across 10 universities", tag:"info"},
+        {t:"Apply to minimum 8 universities — 10 is the safe number for guaranteed entry", tag:"must"},
+        {t:"Submit reach + target schools first (November), safety schools by December", tag:"high"},
+        {t:"Confirm every university's exact deadline — do not rely on estimates", tag:"must"},
+      ]},
+      { label:"Per-university submission checklist", items:[
+        {t:"SOP — tailored to this university and professor, proofread, not copy-pasted", tag:"must"},
+        {t:"CV — updated with both paper statuses, both internships, latest projects", tag:"must"},
+        {t:"3 LORs — uploaded or sent directly by referees per each university's instructions", tag:"must"},
+        {t:"All transcripts + APS certificate + dMAT certificate uploaded", tag:"must"},
+        {t:"Official IELTS score report submitted", tag:"must"},
+        {t:"German B1 certificate uploaded if available", tag:"boost"},
+        {t:"Application fee paid and confirmation email received", tag:"must"},
+        {t:"Save all confirmation emails and application IDs in one dedicated folder", tag:"must"},
+      ]},
+    ]
+  },
+  {
+    id:"p5", label:"Phase 5 — After applications", period:"Jan–Jun 2028", color:"#185fa5",
+    sections:[
+      { label:"Decisions and acceptance", items:[
+        {t:"Decisions typically arrive February–April 2028", tag:"info"},
+        {t:"You usually have 2–3 weeks to formally accept — don't delay", tag:"must"},
+        {t:"Accept your best offer and decline others promptly", tag:"high"},
+      ]},
+      { label:"Visa and finances", items:[
+        {t:"Apply for German student visa immediately after receiving admission letter", tag:"must"},
+        {t:"Open a blocked account (Sperrkonto) — Fintiba or Deutsche Bank — ~€11,208 required", tag:"must"},
+        {t:"Get German health insurance: TK, AOK, or Barmer — all valid for students", tag:"must"},
+        {t:"Book biometrics appointment at German consulate as early as possible — limited slots", tag:"must"},
+        {t:"Set up Indian bank account linked to a forex-friendly card for transition period", tag:"high"},
+      ]},
+      { label:"Pre-departure", items:[
+        {t:"Enroll formally at your university and pay semester fee", tag:"must"},
+        {t:"Apply for student accommodation (Studentenwerk) the moment you're admitted — fills fast", tag:"high"},
+        {t:"Wohnheim (student dorm) is cheapest — apply immediately, waitlists are long", tag:"high"},
+        {t:"Research city-specific transport semester ticket (included in some semester fees)", tag:"info"},
+        {t:"Bachelor ends July 2028 — confirm final transcript dispatch to university immediately after results", tag:"must"},
+        {t:"Inform Prof. Nandi formally — thank him and stay connected for future collaboration", tag:"boost"},
+      ]},
+    ]
+  }
+];
+
+let checkStates = {};
+function saveState(){try{localStorage.setItem('gm_roadmap_v3',JSON.stringify(checkStates));}catch(e){}}
+function loadState(){try{const s=localStorage.getItem('gm_roadmap_v3');if(s)checkStates=JSON.parse(s);}catch(e){}}
+
+function updateStats(){
+  let total=0,done=0,mustTotal=0,mustLeft=0;
+  PHASES.forEach(ph=>{
+    ph.sections.forEach(sec=>{
+      sec.items.forEach(item=>{
+        const key=ph.id+'|'+item.t;
+        total++;
+        if(checkStates[key])done++;
+        if(item.tag==='must'||item.tag==='urgent'){mustTotal++;if(!checkStates[key])mustLeft++;}
+      });
+    });
+  });
+  const pct=total?Math.round(done/total*100):0;
+  ['stat-total','c-total'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=total;});
+  ['stat-done','c-done'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=done;});
+  ['stat-must','c-must'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=mustLeft;});
+  const pctEl=document.getElementById('c-pct');if(pctEl)pctEl.textContent=pct+'%';
+  PHASES.forEach(ph=>{
+    let phTotal=0,phDone=0;
+    ph.sections.forEach(sec=>{sec.items.forEach(item=>{phTotal++;if(checkStates[ph.id+'|'+item.t])phDone++;});});
+    const bar=document.getElementById('bar-'+ph.id);
+    if(bar)bar.style.width=(phTotal?Math.round(phDone/phTotal*100):0)+'%';
+  });
+  document.querySelectorAll('.checklist li').forEach(li=>{
+    const cb=li.querySelector('input[type=checkbox]');
+    if(cb)li.classList.toggle('done',cb.checked);
+  });
+}
+
+function buildPhases(){
+  loadState();
+  const container=document.getElementById('phases-container');
+  const tagLabel={must:'Must',high:'High impact',boost:'Booster',info:'Info',urgent:'Urgent'};
+  PHASES.forEach((ph,pi)=>{
+    const phaseEl=document.createElement('div');
+    phaseEl.className='phase'+(pi===0?' open':'');
+    let totalItems=0;
+    ph.sections.forEach(s=>totalItems+=s.items.length);
+    phaseEl.innerHTML=`
+      <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="phase-dot" style="background:${ph.color}"></span>
+        <span class="phase-title">${ph.label}</span>
+        <span class="phase-period">${ph.period}</span>
+        <span class="phase-count">${totalItems} tasks</span>
+        <span class="chevron">&#8964;</span>
+      </div>
+      <div class="phase-progress"><div class="phase-progress-fill" id="bar-${ph.id}"></div></div>
+      <div class="phase-body">
+        ${ph.sections.map(sec=>`
+          <div class="section-label">${sec.label}</div>
+          <ul class="checklist">
+            ${sec.items.map(item=>{
+              const key=ph.id+'|'+item.t;
+              const checked=checkStates[key]?'checked':'';
+              return `<li class="${checked?'done':''}">
+                <input type="checkbox" ${checked} data-key="${key.replace(/"/g,'&quot;')}" onchange="handleCheck(this)">
+                <span class="task-text">${item.t}</span>
+                <span class="tag ${item.tag}">${tagLabel[item.tag]}</span>
+              </li>`;
+            }).join('')}
+          </ul>
+        `).join('')}
+      </div>`;
+    container.appendChild(phaseEl);
+  });
+  updateStats();
+}
+
+function handleCheck(cb){
+  const key=cb.getAttribute('data-key');
+  checkStates[key]=cb.checked;
+  saveState();
+  updateStats();
+}
+
+buildPhases();
+</script>
+</body>
+</html>
